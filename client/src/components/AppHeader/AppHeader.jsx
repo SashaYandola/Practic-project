@@ -9,20 +9,7 @@ const AppHeader = ({ isLoggedIn, handleLogout, username }) => {
         <h1 className="text-2xl font-bold text-white">Мой Портал</h1>
         <nav>
           <ul className="flex space-x-4">
-            {isLoggedIn ? (
-              <>
-                <li>
-                  <Link to="/" className="text-white hover:text-gray-300">
-                    Главная
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/add" className="text-white hover:text-gray-300">
-                    Добавить сотрудника
-                  </Link>
-                </li>
-              </>
-            ) : (
+            {!isLoggedIn && (
               <>
                 <li>
                   <Link to="/auth/login" className="text-white hover:text-gray-300">
@@ -32,6 +19,20 @@ const AppHeader = ({ isLoggedIn, handleLogout, username }) => {
                 <li>
                   <Link to="/auth/register" className="text-white hover:text-gray-300">
                     Регистрация
+                  </Link>
+                </li>
+              </>
+            )}
+            {isLoggedIn && (
+              <>
+                <li>
+                  <Link to="/" className="text-white hover:text-gray-300">
+                    Главная
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/add" className="text-white hover:text-gray-300">
+                    Добавить сотрудника
                   </Link>
                 </li>
               </>

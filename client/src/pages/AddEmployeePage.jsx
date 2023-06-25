@@ -8,19 +8,22 @@ const AddEmployeePage = () => {
   const queryClient = useQueryClient();
 
   const createEmployee = async (employeeData) => {
-    const response = await fetch('http://localhost:3001/', {
+    const res = await fetch('http://localhost:3001/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(employeeData),
     });
 
-    if (!response.ok) {
+    if (!res.ok) {
+      navigate('/auth/login')
+      console.log(res)
       throw new Error('Failed to create employee');
     }
 
-    const data = await response.json();
+    const data = await res.json();
     return data;
   };
 

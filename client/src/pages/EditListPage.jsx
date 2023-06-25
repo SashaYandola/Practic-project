@@ -15,7 +15,8 @@ const EditEmployeePage = () => {
       const response = await fetch(`http://localhost:3001/edit/${id}`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
         body: JSON.stringify(data)
       });

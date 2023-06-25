@@ -6,17 +6,34 @@ import {
 } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
+import { useNavigate } from 'react-router-dom';
+
 const MainPage = () => {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
   const [department, setDepartment] = useState('');
+  const navigate = useNavigate()
 
   const { isLoading, isError, data } = useQuery(['employees'], () =>
-    fetch('http://localhost:3001').then((res) => res.json())
+    fetch('http://localhost:3001', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    }).then((res) => {
+      if (!res.ok) {
+        console.log(res)
+        navigate('/auth/login/')
+        
+      }
+      return res.json();
+    })
   );
+  console.log(localStorage.getItem('token'))
 
   const deleteEmployee = useMutation(
-    (id) => fetch(`http://localhost:3001/${id}`, { method: 'DELETE' }),
+    (id) => fetch(`http://localhost:3001/${id}`, { method: 'DELETE', headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    }}),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['employees']);
@@ -62,7 +79,7 @@ const MainPage = () => {
     return <div>Завантаження даних...</div>;
   }
 
-  const { employees } = data;
+  const employees = data?.employees || [];
 
   const filteredEmployees = filterEmployees(employees, searchQuery);
 

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AppHeader from './components/AppHeader/AppHeader';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+
 
 import Login from './pages/Login';
 import MainPage from './pages/MainPage';
@@ -26,15 +26,9 @@ const App = () => {
           <AppHeader isLoggedIn={isLoggedIn} handleLogout={handleLogout} username={username} />
           <div className="container mx-auto mt-8">
             <Routes>
-              <Route path='/' element={<PrivateRoute />}>
                 <Route path="/" element={<MainPage />} />
-              </Route>
-              <Route path='/' element={<PrivateRoute />}>
                 <Route path="/add" element={<AddEmployeePage />} />
-              </Route>
-              <Route path='/' element={<PrivateRoute />}>
                 <Route path="/edit/:id" element={<EditListPage />} />
-              </Route>
               <Route path="/auth/login" element={<Login handleLogin={handleLogin} />} />
               <Route path="/auth/register" element={<Register />} />
             </Routes>

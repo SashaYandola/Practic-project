@@ -1,11 +1,12 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
+const authenticateToken = require('../middleware/auth.middleware.js');
 
 const prisma = new PrismaClient();
 const router = express.Router();
 
 // Маршрут получения списка сотрудников
-router.get('/', async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
   try {
     const employees = await prisma.employee.findMany();
     const formattedEmployees = employees.map(employee => {
@@ -24,8 +25,9 @@ router.get('/', async (req, res) => {
 });
 
 // Маршрут добавления сотрудника
-router.post('/', async (req, res) => {
+router.post('/add', authenticateToken, async (req, res) => {
   try {
+
     const { firstName, lastName, department, birthDate, monthlySalary, skills, jobType, comment } = req.body;
     // Проверка значения jobType
     const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
@@ -56,7 +58,7 @@ router.post('/', async (req, res) => {
 });
 
 // Маршрут для удаления сотрудника по идентификатору
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -72,7 +74,7 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Маршрут для обновления данных сотрудника по идентификатору
-router.put('/edit/:id', async (req, res) => {
+router.put('/edit/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   const { firstName, lastName, department, birthDate, monthlySalary, skills, jobType, comment } = req.body;
   // Проверка значения jobType
