@@ -27,6 +27,13 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { firstName, lastName, department, birthDate, monthlySalary, skills, jobType, comment } = req.body;
+      // Проверка значения jobType
+      const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
+
+    // Проверка значения jobType
+    if (formattedJobType !== "office" && formattedJobType !== "remote") {
+      return res.status(400).json({ message: "Недопустимое значение для jobType" });
+    }
 
     const employee = await prisma.employee.create({
       data: {
@@ -36,7 +43,7 @@ router.post('/', async (req, res) => {
         birthDate: new Date(birthDate),
         monthlySalary: parseFloat(monthlySalary),
         skills, // Сохранение навыков в виде массива
-        jobType,
+        jobType: formattedJobType,
         comment,
       },
     });
@@ -68,6 +75,13 @@ router.delete('/:id', async (req, res) => {
 router.put('/edit/:id', async (req, res) => {
   const { id } = req.params;
   const { firstName, lastName, department, birthDate, monthlySalary, skills, jobType, comment } = req.body;
+    // Проверка значения jobType
+    const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
+
+    // Проверка значения jobType
+    if (formattedJobType !== "office" && formattedJobType !== "remote") {
+      return res.status(400).json({ message: "Недопустимое значение для jobType" });
+    }
  
 
   try {
@@ -80,7 +94,7 @@ router.put('/edit/:id', async (req, res) => {
         birthDate: new Date(birthDate),
         monthlySalary: parseFloat(monthlySalary),
         skills, // Сохранение навыков в виде массива
-        jobType,
+        jobType: formattedJobType,
         comment,
       },
     });

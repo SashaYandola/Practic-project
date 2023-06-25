@@ -110,6 +110,7 @@ const AddEmployeePage = () => {
           <input
             type="text"
             id="jobType"
+            placeholder='Office or Remote'
             {...register('jobType', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
