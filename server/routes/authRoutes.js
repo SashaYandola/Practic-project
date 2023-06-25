@@ -67,9 +67,9 @@ router.post('/login', async (req, res) => {
     }
     console.log('jwtSecret:', JWT_SECRET);
     // Создаем и подписываем JWT токен
-    const token = jwt.sign({ 
-        userId: user.id,
-     }, JWT_SECRET);
+    const token = jwt.sign({
+      userId: user.id,
+    }, JWT_SECRET);
 
     console.log('JWT Token:', token);
 

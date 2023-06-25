@@ -15,11 +15,11 @@ const AddEmployeePage = () => {
       },
       body: JSON.stringify(employeeData),
     });
-  
+
     if (!response.ok) {
       throw new Error('Failed to create employee');
     }
-  
+
     const data = await response.json();
     return data;
   };

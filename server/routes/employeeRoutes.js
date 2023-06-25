@@ -9,13 +9,13 @@ router.get('/', async (req, res) => {
   try {
     const employees = await prisma.employee.findMany();
     const formattedEmployees = employees.map(employee => {
-      
+
       return {
         ...employee,
         skills: employee.skills.split(' ').join(', ') // Преобразование строки с навыками в массив
       };
     });
-    
+
     res.json({ employees: formattedEmployees });
   } catch (error) {
     console.error(error);
@@ -27,8 +27,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { firstName, lastName, department, birthDate, monthlySalary, skills, jobType, comment } = req.body;
-      // Проверка значения jobType
-      const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
+    // Проверка значения jobType
+    const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
 
     // Проверка значения jobType
     if (formattedJobType !== "office" && formattedJobType !== "remote") {
@@ -42,7 +42,7 @@ router.post('/', async (req, res) => {
         department,
         birthDate: new Date(birthDate),
         monthlySalary: parseFloat(monthlySalary),
-        skills, // Сохранение навыков в виде массива
+        skills,
         jobType: formattedJobType,
         comment,
       },
@@ -75,14 +75,14 @@ router.delete('/:id', async (req, res) => {
 router.put('/edit/:id', async (req, res) => {
   const { id } = req.params;
   const { firstName, lastName, department, birthDate, monthlySalary, skills, jobType, comment } = req.body;
-    // Проверка значения jobType
-    const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
+  // Проверка значения jobType
+  const formattedJobType = jobType.toLowerCase(); // Преобразование в нижний регистр
 
-    // Проверка значения jobType
-    if (formattedJobType !== "office" && formattedJobType !== "remote") {
-      return res.status(400).json({ message: "Недопустимое значение для jobType" });
-    }
- 
+  // Проверка значения jobType
+  if (formattedJobType !== "office" && formattedJobType !== "remote") {
+    return res.status(400).json({ message: "Недопустимое значение для jobType" });
+  }
+
 
   try {
     const updatedEmployee = await prisma.employee.update({
@@ -93,7 +93,7 @@ router.put('/edit/:id', async (req, res) => {
         department,
         birthDate: new Date(birthDate),
         monthlySalary: parseFloat(monthlySalary),
-        skills, // Сохранение навыков в виде массива
+        skills,
         jobType: formattedJobType,
         comment,
       },
