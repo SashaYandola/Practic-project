@@ -46,10 +46,10 @@ const EditEmployeePage = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Редактирование сотрудника: {id}</h1>
+      <h1 className="text-2xl font-bold mb-4">Редагування співробітника: {id}</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
-          <label htmlFor="firstName">Имя:</label>
+          <label htmlFor="firstName">{`Ім'я:`}:</label>
           <input
             type="text"
             id="firstName"
@@ -57,10 +57,10 @@ const EditEmployeePage = () => {
             {...register('firstName', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.firstName && <p className="text-red-600">Поле Имя обязательно для заполнения</p>}
+          {errors.firstName && <p className="text-red-600">Поле {`Ім'я:`} {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="lastName">Фамилия:</label>
+          <label htmlFor="lastName">Фамілія:</label>
           <input
             type="text"
             id="lastName"
@@ -68,10 +68,10 @@ const EditEmployeePage = () => {
             {...register('lastName', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.lastName && <p className="text-red-600">Поле Фамилия обязательно для заполнения</p>}
+          {errors.lastName && <p className="text-red-600">Поле Фамілія {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="department">Отдел:</label>
+          <label htmlFor="department">Відділ:</label>
           <input
             type="text"
             id="department"
@@ -79,10 +79,10 @@ const EditEmployeePage = () => {
             {...register('department', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.department && <p className="text-red-600">Поле Отдел обязательно для заполнения</p>}
+          {errors.department && <p className="text-red-600">Поле Відділ {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="birthDate">Дата рождения:</label>
+          <label htmlFor="birthDate">Дата народження:</label>
           <input
             type="text"
             id="birthDate"
@@ -90,10 +90,10 @@ const EditEmployeePage = () => {
             {...register('birthDate', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.birthDate && <p className="text-red-600">Поле Дата рождения обязательно для заполнения</p>}
+          {errors.birthDate && <p className="text-red-600">Поле Дата народження {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="monthlySalary">Ежемесячная зарплата:</label>
+          <label htmlFor="monthlySalary">Щомісячна зарплата:</label>
           <input
             type="text"
             id="monthlySalary"
@@ -101,10 +101,10 @@ const EditEmployeePage = () => {
             {...register('monthlySalary', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.monthlySalary && <p className="text-red-600">Поле Ежемесячная зарплата обязательно для заполнения</p>}
+          {errors.monthlySalary && <p className="text-red-600">Поле Щомісячна зарплата {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="skills">Навыки:</label>
+          <label htmlFor="skills">Навички:</label>
           <input
             type="text"
             id="skills"
@@ -112,10 +112,10 @@ const EditEmployeePage = () => {
             {...register('skills', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.skills && <p className="text-red-600">Поле Навыки обязательно для заполнения</p>}
+          {errors.skills && <p className="text-red-600">Поле Навички {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="jobType">Тип работы:</label>
+          <label htmlFor="jobType">Тип роботи:</label>
           <input
             type="text"
             id="jobType"
@@ -123,10 +123,10 @@ const EditEmployeePage = () => {
             {...register('jobType', { required: true })}
             className="w-full p-2 border border-gray-300"
           />
-          {errors.jobType && <p className="text-red-600">Поле Тип работы обязательно для заполнения</p>}
+          {errors.jobType && <p className="text-red-600">Поле Тип роботи {`обов'язкове`} для заповнення</p>}
         </div>
         <div className="mb-4">
-          <label htmlFor="comment">Комментарий:</label>
+          <label htmlFor="comment">Коментарій:</label>
           <input
             type="text"
             id="comment"
@@ -138,7 +138,7 @@ const EditEmployeePage = () => {
 
         <div>
           {errorMessage && <p>{errorMessage}</p>}
-          <button type="submit" className="btn btn-blue">Сохранить</button>
+          <button type="submit" className="btn btn-blue">Зберегти</button>
         </div>
       </form>
     </div>
