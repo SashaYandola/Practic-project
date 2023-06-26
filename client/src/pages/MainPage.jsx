@@ -5,14 +5,15 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import EmployeeSearch from '../components/EmployeeSearch/EmployeeSearch';
 
 import { useNavigate } from 'react-router-dom';
 
 const MainPage = () => {
   const queryClient = useQueryClient();
-  const [searchQuery, setSearchQuery] = useState('');
   const [department, setDepartment] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const { isLoading, isError, data } = useQuery(['employees'], () =>
     fetch('http://localhost:3001', {
@@ -43,6 +44,10 @@ const MainPage = () => {
 
   const handleDelete = (id) => {
     deleteEmployee.mutate(id);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
   };
 
   const filterEmployees = (employees, query) => {
@@ -100,15 +105,8 @@ const MainPage = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Список співробітників</h1>
-      <div className="mb-4">
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Пошук (Ім'я та Прізвище)"
-          className="w-full p-2 border border-gray-300"
-        />
-      </div>
+      <EmployeeSearch onSearch={handleSearch} />
+     
       <div className="mb-4">
         <select
           value={department}

@@ -1,20 +1,23 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const EmployeeSearch = () => {
+const EmployeeSearch = ({ onSearch }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const handleSearchChange = (event) => {
-    setSearchQuery(event.target.value);
+    const query = event.target.value;
+    setSearchQuery(query);
+    onSearch(query);
   };
 
   return (
-    <div>
+    <div className="mb-4">
       <input
         type="text"
         value={searchQuery}
         onChange={handleSearchChange}
-        placeholder="Введите имя или фамилию сотрудника"
+        placeholder="Пошук (Ім'я та Прізвище)"
+        className="w-full p-2 border border-gray-300"
       />
     </div>
   );
