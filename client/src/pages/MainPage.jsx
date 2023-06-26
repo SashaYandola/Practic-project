@@ -1,20 +1,19 @@
-import { useState } from 'react';
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
-import EmployeeSearch from '../components/EmployeeSearch/EmployeeSearch';
 
+import { useQuery, useMutation, useQueryClient} from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import EmployeeSearch from '../components/EmployeeSearch/EmployeeSearch';
+import EmployeeList from '../components/EmployeeList/EmployeeList';
+import EmployeeFilterDepartament from '../components/EmployeeFilterDepartament/EmployeeFilterDepartament';
 
 const MainPage = () => {
+  // State и хуки
   const queryClient = useQueryClient();
   const [department, setDepartment] = useState('');
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Запрос на получение данных
   const { isLoading, isError, data } = useQuery(['employees'], () =>
     fetch('http://localhost:3001', {
       headers: {
@@ -22,19 +21,22 @@ const MainPage = () => {
       },
     }).then((res) => {
       if (!res.ok) {
-        console.log(res)
-        navigate('/auth/login/')
-        
+        console.log(res);
+        navigate('/auth/login/');
       }
       return res.json();
     })
   );
-  console.log(localStorage.getItem('token'))
 
+  // Мутация для удаления сотрудника
   const deleteEmployee = useMutation(
-    (id) => fetch(`http://localhost:3001/${id}`, { method: 'DELETE', headers: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    }}),
+    (id) =>
+      fetch(`http://localhost:3001/${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      }),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['employees']);
@@ -42,14 +44,7 @@ const MainPage = () => {
     }
   );
 
-  const handleDelete = (id) => {
-    deleteEmployee.mutate(id);
-  };
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-  };
-
+  // Функция для фильтрации сотрудников
   const filterEmployees = (employees, query) => {
     if (!query) {
       return employees;
@@ -72,10 +67,20 @@ const MainPage = () => {
     });
   };
 
+  // Обработчики событий
+  const handleDelete = (id) => {
+    deleteEmployee.mutate(id);
+  };
+
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+  };
+
   const handleDepartmentChange = (event) => {
     setDepartment(event.target.value);
   };
 
+  // Рендеринг компонента
   if (isError) {
     return <div>Помилка при завантаженні даних</div>;
   }
@@ -85,17 +90,16 @@ const MainPage = () => {
   }
 
   const employees = data?.employees || [];
-
   const filteredEmployees = filterEmployees(employees, searchQuery);
-
   const departments = [...new Set(employees.map((employee) => employee.department))];
 
-  // Обчислення середньої зарплати
-  const averageSalary = filteredEmployees.reduce((sum, employee) => {
-    return sum + employee.monthlySalary;
-  }, 0) / filteredEmployees.length;
+  // Обчисление средней зарплаты
+  const averageSalary =
+    filteredEmployees.reduce((sum, employee) => {
+      return sum + employee.monthlySalary;
+    }, 0) / filteredEmployees.length;
 
-  // Обчислення загальної зарплати за відділ
+  // Обчисление общей зарплаты за отдел
   const departmentTotalSalary = filteredEmployees
     .filter((employee) => employee.department === department)
     .reduce((sum, employee) => {
@@ -106,63 +110,18 @@ const MainPage = () => {
     <div>
       <h1 className="text-2xl font-bold mb-4">Список співробітників</h1>
       <EmployeeSearch onSearch={handleSearch} />
-     
-      <div className="mb-4">
-        <select
-          value={department}
-          onChange={handleDepartmentChange}
-          className=" p-2 border border-gray-300"
-        >
-          <option value="">Всі відділи</option>
-          {departments.map((dept) => (
-            <option key={dept} value={dept}>
-              {dept}
-            </option>
-          ))}
-        </select>
-      </div>
+      <EmployeeFilterDepartament
+        department={department}
+        handleDepartmentChange={handleDepartmentChange}
+        departments={departments}
+      />
       <p className="text-lg font-bold">Середня зарплата: {averageSalary.toFixed(2)}</p>
       {department && (
-        <p className="text-lg font-bold">Загальна зарплата за відділ: {departmentTotalSalary.toFixed(2)}</p>
+        <p className="text-lg font-bold">
+          Загальна зарплата за відділ: {departmentTotalSalary.toFixed(2)}
+        </p>
       )}
-      <ul className="grid grid-cols-3 gap-6">
-        {filteredEmployees
-          .filter((employee) => !department || employee.department === department)
-          .map((employee) => (
-            <li key={employee.id} className="p-4 border border-gray-300 rounded-lg">
-              <h3 className="text-xl font-bold mb-3">{employee.firstName}</h3>
-              <p className="mb-2 font-bold">
-                Прізвище: <span className="font-normal">{employee.lastName}</span>
-              </p>
-              <p className="mb-2 font-bold">
-                Відділ: <span className="font-normal">{employee.department}</span>
-              </p>
-              <p className="mb-2 font-bold">
-                Дата народження: <span className="font-normal">{employee.birthDate}</span>
-              </p>
-              <p className="mb-2 font-bold">
-                Місячна зарплата: <span className="font-normal">{employee.monthlySalary}</span>
-              </p>
-              <p className="mb-2 font-bold">
-                Навички: <span className="font-normal">{employee.skills}</span>
-              </p>
-              <p className="mb-2 font-bold">
-                Тип роботи: <span className="font-normal">{employee.jobType}</span>
-              </p>
-              {employee.comment && (
-                <p className="mb-2 font-bold">
-                  Коментар: <span className="font-normal">{employee.comment}</span>
-                </p>
-              )}
-              <button onClick={() => handleDelete(employee.id)} className="btn btn-red mr-3">
-                Видалити
-              </button>
-              <Link to={`/edit/${employee.id}`} className="btn btn-blue mt-2">
-                Редагувати
-              </Link>
-            </li>
-          ))}
-      </ul>
+      <EmployeeList employees={filteredEmployees} handleDelete={handleDelete} department={department} />
     </div>
   );
 };
